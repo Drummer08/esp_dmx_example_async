@@ -29,7 +29,7 @@ async fn dmx_task(uart: UART1<'static>, tx_pin: GPIO4<'static>) {
     let mut delay = Delay;
 
     // set dimmer and rgb channel
-    dmx.set_channels(Channel::new(1).unwrap(), &[255, 255, 0, 150])
+    dmx.set_channels(Channel::new(1).unwrap(), &[255, 180, 255, 150])
         .unwrap();
     info!("DMX initialised");
 
@@ -44,27 +44,8 @@ async fn dmx_task(uart: UART1<'static>, tx_pin: GPIO4<'static>) {
 )]
 #[esp_rtos::main]
 async fn main(spawner: Spawner) -> ! {
-    // generator version: 1.4.0
-    // generator parameters: -o esp32c6 -o esp32c6-wroom-1 -o unstable-hal -o embassy -o defmt -o esp-backtrace -o zed
-
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
     let peripherals = esp_hal::init(config);
-
-    // The following pins are used to bootstrap the chip. They are available
-    // for use, but check the datasheet of the module for more information on them.
-    // - GPIO4
-    // - GPIO5
-    // - GPIO8
-    // - GPIO9
-    // - GPIO15
-    // These GPIO pins are in use by some feature of the module and should not be used.
-    let _gpio24 = peripherals.GPIO24;
-    let _gpio25 = peripherals.GPIO25;
-    let _gpio26 = peripherals.GPIO26;
-    let _gpio27 = peripherals.GPIO27;
-    let _gpio28 = peripherals.GPIO28;
-    let _gpio29 = peripherals.GPIO29;
-    let _gpio30 = peripherals.GPIO30;
 
     let timg0 = TimerGroup::new(peripherals.TIMG0);
     esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
